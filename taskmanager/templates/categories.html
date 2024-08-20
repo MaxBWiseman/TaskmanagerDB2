@@ -5,26 +5,45 @@
 
 <div class="row">
     <div class="col s12 center-align">
-        <a href="{{ url_for('add_category') }}" class="btn-large light-blue darken-2">
-            Add Category <i class="fas fa-plus-square right"></i>
+        <a href="{{ url_for('add_category')}}" class="btn-large light-blue darken-2">
+            Add category <i class="fas fa-plus-square right"></i>
         </a>
     </div>
 </div>
-
 <div class="row">
     {% for category in categories %}
+    <!--This loop interates all the user entered categories in the db and displays them side by side-->
+    <!--doing it this way is good practice as you are not repeating yourself-->
     <div class="col s12 m6 l3">
         <div class="card light-blue darken-4 center-align">
             <div class="card-content white-text">
                 <span class="card-title">{{ category.category_name }}</span>
             </div>
             <div class="card-action">
+                <!--CRUD functionality (create, read, update, delete )-->
                 <a href="{{ url_for('edit_category', category_id=category.id) }}" class="btn green accent-4">Edit</a>
-                <a href="{{ url_for('delete_category', category_id=category.id) }}" class="btn red">Delete</a>
+                <a href="#modal-{{ category.id }}" class="btn red modal-trigger">Delete</a>
+                <!--since we are within the for-loop of all categories, it's using the current
+                iteration variable of 'category', and then targeting the key of 'id' from that record.
+                The 'category_id' assigned is just the variable name we're passing into the app.route function
+                that we created within the routes.py file.-->
+
+                <!-- Modal Structure -->
+                <div id="modal-{{ category.id }}" class="modal">
+                    <div class="modal-content">
+                        <h4>Are you sure you want to delete this Category?</h4>
+                        <p>This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('delete_category', category_id=category.id) }}" class="btn red">Delete</a>
+                        <a href="#" class="modal-close btn green accent-4">Cancel</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
 
 {% endblock %}
